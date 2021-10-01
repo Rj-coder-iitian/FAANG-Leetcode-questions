@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-//thank you 
+//this solution uses backtracking concept to solve the n queen problem 
 class Solution
 {
 public:
