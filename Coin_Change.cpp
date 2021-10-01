@@ -5,7 +5,7 @@
 // 1 2 5
 // Enter the amount to be made
 // 11
-
+//12
 // Minimum number of coins required are : 3
 //  ------------------------------------------------
 //ok onceagain
