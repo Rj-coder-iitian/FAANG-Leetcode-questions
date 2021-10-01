@@ -177,6 +177,7 @@ public:
     vector<vector<string>> solveNQueens(int n)
     {
         vector<vector<string>> ans;
+        //initial 2d array in dynamic form
         string s(n, '.');
         vector<string> Board(n);
         for (int i = 0; i < n; i++)
