@@ -34,6 +34,8 @@ int coinChange(vector<int> &coins, int amount)
     return dp[n][amount] > 1e4 ? -1 : dp[n][amount];
 }
 
+//here is you main function which calculate solution
+
 int main()
 {
     cout << "Enter the number of coins" << endl;
