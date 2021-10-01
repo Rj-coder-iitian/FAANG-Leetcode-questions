@@ -6,6 +6,7 @@ hdn = []
 
 while dn!=0:
     rem = dn % 16
+    //converting to base 16
     if rem<10:
         rem = rem+48
     else:
@@ -13,7 +14,8 @@ while dn!=0:
     hdn.insert(i, chr(rem))
     i = i+1
     dn = int(dn / 16)
-
+    //converting to base 16
+    
 print("\nEquivalent Hexadecimal Value = ", end="")
 i = i-1
 while i>=0:
