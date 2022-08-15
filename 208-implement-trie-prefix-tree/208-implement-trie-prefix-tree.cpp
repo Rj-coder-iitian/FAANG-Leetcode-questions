@@ -4,40 +4,75 @@ public:
     
     void insert(string word) {
         Trie* node = this; 
-        for(int i=0;i<word.length();i++) {
-            int chIndex = word[i] - 'a';
-            if(!node->child[chIndex])
-                node->child[chIndex] = new Trie();
-            node = node->child[chIndex];
+        for(auto ch: word) {
+            if(!node->child.count(ch))
+                node->child[ch] = new Trie();
+            node = node->child[ch];
         }
         node->isWord = true;
     }
     
     bool search(string word) {
         Trie* node = this;
-        for(int i=0;i<word.length();i++) {
-            int chIndex = word[i] - 'a';
-            if(!node->child[chIndex])
+        for(auto ch: word) {
+            if(!node->child.count(ch))
                 return false;
-            node = node->child[chIndex];
+            node = node->child[ch];
         }
         return node->isWord;
     }
     
     bool startsWith(string prefix) {
         Trie* node = this;
-        for(int i=0;i<prefix.length();i++) {
-            int chIndex = prefix[i] - 'a';
-            if(!node->child[chIndex])
+        for(auto ch: prefix) {
+            if(!node->child.count(ch))
                 return false;
-            node = node->child[chIndex];
+            node = node->child[ch];
         }
         return true;
     }
 
 private:
-    Trie* child[26] = {};
-    bool isWord = false;    
+    map<char,Trie*> child = {};
+    bool isWord = false;  
+//     Trie() { }
+    
+//     void insert(string word) {
+//         Trie* node = this; 
+//         for(int i=0;i<word.length();i++) {
+//             int chIndex = word[i] - 'a';
+//             if(!node->child[chIndex])
+//                 node->child[chIndex] = new Trie();
+//             node = node->child[chIndex];
+//         }
+//         node->isWord = true;
+//     }
+    
+//     bool search(string word) {
+//         Trie* node = this;
+//         for(int i=0;i<word.length();i++) {
+//             int chIndex = word[i] - 'a';
+//             if(!node->child[chIndex])
+//                 return false;
+//             node = node->child[chIndex];
+//         }
+//         return node->isWord;
+//     }
+    
+//     bool startsWith(string prefix) {
+//         Trie* node = this;
+//         for(int i=0;i<prefix.length();i++) {
+//             int chIndex = prefix[i] - 'a';
+//             if(!node->child[chIndex])
+//                 return false;
+//             node = node->child[chIndex];
+//         }
+//         return true;
+//     }
+
+// private:
+//     Trie* child[26] = {};
+//     bool isWord = false;    
 };
 
 /**
