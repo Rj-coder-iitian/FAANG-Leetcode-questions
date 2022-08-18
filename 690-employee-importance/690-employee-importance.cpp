@@ -10,27 +10,18 @@ public:
 
 class Solution {
 public:
-    void getImportanceHelper(Employee* employee, int id, unordered_map<int, Employee*> mp, unordered_set<int>& vis, int& res) {
-        vis.insert(id);
-        res += employee->importance;
-        for(auto sub: employee->subordinates) {
-            if(vis.find(sub) == vis.end()){
-                getImportanceHelper(mp[sub], sub, mp, vis, res);
-            }
-        }
-    }
     int getImportance(vector<Employee*> employees, int id) {
-        unordered_map<int, Employee*> mp;
-        for(auto employee : employees){
-            mp[employee->id] = employee;
+        unordered_map<int, Employee*>m;
+        for(auto x: employees) m[x->id] = x;
+        int sum = 0;
+        deque<Employee*>q;
+        q.push_back(m[id]);
+        while(!q.empty()){
+            auto p = q.front();
+            q.pop_front();
+            for(auto x: p->subordinates) q.push_back(m[x]);
+            sum += p->importance;
         }
-        unordered_set<int> vis;
-        int res = 0;
-        for(int i=0;i<employees.size();i++) {
-            if(employees[i]->id == id){
-                getImportanceHelper(employees[i], id, mp, vis, res);
-            }
-        }
-        return res;
+        return sum;
     }
 };
