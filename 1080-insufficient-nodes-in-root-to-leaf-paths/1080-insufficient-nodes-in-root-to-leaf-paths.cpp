@@ -12,12 +12,18 @@
 class Solution {
 public:
     TreeNode* sufficientSubset(TreeNode* root, int limit) {
-        if(root->left == root->right)
+        if(!root)
+            return root;
+        //Case 1: node is leaf
+        if(!root->left && !root->right)
             return root->val < limit ? NULL : root;
-        if(root->left)
+        else {
+        //Case 2: root is NOT leaf.
             root->left = sufficientSubset(root->left, limit - root->val);
-        if(root->right)
             root->right = sufficientSubset(root->right, limit - root->val);
-        return root->left == root->right ? NULL : root;
+            if(!root->left && !root->right)
+                return NULL;
+        }
+        return root;
     }
 };
