@@ -11,54 +11,22 @@
  */
 class Solution {
 public:
-    void buildMap(TreeNode* root, TreeNode* prev, unordered_map<TreeNode*, TreeNode*>& mp,  unordered_set<int>& del, unordered_map<int, TreeNode*>& mpVal) {
-        if(!root)
-            return;
-        buildMap(root->left, root, mp, del, mpVal);
-        buildMap(root->right, root, mp, del, mpVal);
-        if(prev && del.find(prev->val) != del.end()){
-            mp[root] = NULL;
-        } else
-            mp[root] = prev;
-        
-        mpVal[root->val] = root;
-    }
-    TreeNode* correctTree(TreeNode* root,  unordered_set<int>& del) {
-        if(!root)
-            return NULL;
-        root->left = correctTree(root->left, del);
-        root->right = correctTree(root->right, del);
-        if(del.find(root->val) != del.end())
-            return NULL;
-        return root;
-    }
+    vector<TreeNode*> result;
+    set<int> to_deleteSet;
     vector<TreeNode*> delNodes(TreeNode* root, vector<int>& to_delete) {
-        unordered_map<TreeNode*, TreeNode*> mp;
-        unordered_map<int, TreeNode*> mpVal;
-        unordered_set<int> del;
-        for(int node_val: to_delete){
-            del.insert(node_val);
-        }
-        TreeNode* prev = NULL;
-        buildMap(root, prev, mp,del, mpVal);
-        root = correctTree(root, del);
-        for(int node_val: to_delete){
-            TreeNode* node = mpVal[node_val];
-            mpVal.erase(node_val);
-            mp.erase(node);
-        }
-        vector<TreeNode*> rootArr;
-        unordered_set<TreeNode*> st;
-        for(auto v = mpVal.begin(); v != mpVal.end(); v++){
-            TreeNode* curr = (*v).second;
-            while(mp[curr] != NULL) {
-                curr = mp[curr];
-            }
-            st.insert(curr);
-        }
-        for(auto v = st.begin(); v != st.end(); v++){ 
-            rootArr.push_back(*v);
-        }
-        return rootArr;
+        for(int i: to_delete)
+            to_deleteSet.insert(i);
+        helper(root, result, to_deleteSet, true);
+        return result;
+    }
+    TreeNode* helper(TreeNode* root, vector<TreeNode*>& result, set<int>& to_deleteSet, bool is_root){
+        if(!root)   return NULL;
+        bool deleted = to_deleteSet.find(root->val) != to_deleteSet.end();
+        if(is_root && !deleted)
+            result.push_back(root);
+        root->left = helper(root->left, result, to_deleteSet, deleted);
+        root->right = helper(root->right, result, to_deleteSet, deleted);
+        
+        return deleted ? NULL : root;
     }
 };
