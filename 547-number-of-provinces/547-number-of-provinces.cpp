@@ -1,47 +1,30 @@
 class Solution {
 public:
-    vector<int>parent;
-    vector<int> rank;
- 	int find(int x) {
-        if(x == parent[x])
-            return x;
-        parent[x] = find(parent[x]);
- 		return parent[x];
- 	}
-    void unionFun (int x, int y) {
-        int x_rep = find(x), y_rep = find(y);
-        if(x_rep == y_rep)
-            return;
-        if(rank[x_rep] < rank[y_rep]) parent[x_rep] = y_rep;
-        else if(rank[x_rep] > rank[y_rep]) parent[y_rep] = x_rep;
-        else {
-            parent[y_rep] = x_rep;
-            rank[x_rep]++;
-        }
-    }
-    int findCircleNum(vector<vector<int>>& isConnected) {
-        int n = isConnected.size();
+    int findCircleNum(vector<vector<int>>& M) {
+        if (M.empty()) return 0;
+        int n = M.size();
 
- 		parent.resize(n+1, 0);
-        rank.resize(n+1, 0);
- 		for (int i = 0; i <= n; i++)
- 			parent[i] = i;
-        
-        vector<int>res(2, 0);
- 		for (int i = 0; i < n; i++) {
- 			for(int j=i+1;j<n;j++) {
-                if(isConnected[i][j]){
-                    unionFun(i+1, j+1);
+        vector<int> leads(n, 0);
+        for (int i = 0; i < n; i++) { leads[i] = i; }   // initialize leads for every kid as themselves
+
+        int groups = n;
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {   // avoid recalculate M[i][j], M[j][i]
+                if (M[i][j]) {
+                    int lead1 = find(i, leads);
+                    int lead2 = find(j, leads);
+                    if (lead1 != lead2) {       // if 2 group belongs 2 different leads, merge 2 group to 1
+                        leads[lead1] = lead2;
+                        groups--;
+                    }
                 }
             }
- 		}
-        unordered_set<int> ans;
-    
-        for(int i=0;i<n;i++) {
-            if(ans.find(find(i+1)) == ans.end())
-                ans.insert(find(i+1));
         }
+        return groups;
+    }
 
- 		return ans.size();
+private:
+    int find(int x, vector<int>& parents) {
+        return parents[x] == x ? x : find(parents[x], parents);
     }
 };
