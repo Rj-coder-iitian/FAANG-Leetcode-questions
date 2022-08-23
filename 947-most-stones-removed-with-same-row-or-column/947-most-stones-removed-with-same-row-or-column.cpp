@@ -15,7 +15,7 @@ public:
     int removeStones(vector<vector<int>>& stones) {
         int n = stones.size();
         for(int i=0;i<n;i++) {
-            uni(stones[i][0], ~stones[i][1]);
+            uni(stones[i][0], 20000 + stones[i][1]);
         }
         return n - islands;
     }
