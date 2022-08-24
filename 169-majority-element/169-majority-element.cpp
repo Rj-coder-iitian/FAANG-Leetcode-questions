@@ -2,16 +2,16 @@ class Solution {
 public:
     int majorityElement(vector<int>& nums) {
         int n = nums.size();
-        unordered_set<int> st;
-        unordered_map<int, int> f;
-        for(int i=0;i<n;i++) {
-            f[nums[i]]++;
-            st.insert(nums[i]);
+        int major = nums[0], count = 1;
+        for(int i = 1;i<n;i++){
+            if(count == 0){
+                count++;
+                major = nums[i];
+            } else if(major == nums[i])
+                count++;
+            else
+                count--;
         }
-        for(auto it = st.begin(); it != st.end(); it++) {
-            if(f[*it]*2 >= n)
-                return *it;
-        }
-        return nums[0];
+        return major;
     }
 };
