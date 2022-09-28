@@ -1,15 +1,14 @@
 class Solution {
 public:
-    int mincostTickets(vector<int>& days, vector<int>& costs) {
-        unordered_set<int> st(days.begin(), days.end());
-        vector<int> dp(30);
-        dp[0] = 0;
-        for(int i=days.front();i<=days.back();i++){
-            if(st.find(i) == st.end())  dp[i%30] = dp[(i-1)%30];
-            else {
-                dp[i%30] = min({dp[(i-1)%30] + costs[0], dp[(max(0, i-7))%30] + costs[1], dp[(max(0, i-30)%30)] + costs[2]});
-            }
+    int mincostTickets(vector<int>& days, vector<int>& costs, int cost = 0) {
+        queue<pair<int, int>> last7, last30;
+        for(auto& d: days){
+            while(!last7.empty() && last7.front().first + 7 <= d) last7.pop();
+            while(!last30.empty() && last30.front().first + 30 <= d) last30.pop();
+            last7.push({d, cost + costs[1]});
+            last30.push({d, cost + costs[2]});
+            cost = min({cost + costs[0], last7.front().second, last30.front().second});
         }
-        return dp[(days.back())%30];
+        return cost;
     }
 };
